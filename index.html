@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Simple Calculator</title>
+    <style>
+        body {
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+        }
+
+        .calculator {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 320px;
+        }
+
+        .display {
+            background: #f0f0f0;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 24px;
+            text-align: right;
+            margin-bottom: 20px;
+            color: #333;
+            overflow-x: auto;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        button {
+            padding: 18px;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            background-color: #e2e8f0;
+            color: #333;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #cbd5e1;
+        }
+
+        .operator {
+            background-color: #dbeafe;
+        }
+
+        .operator:hover {
+            background-color: #bfdbfe;
+        }
+
+        .equal {
+            background-color: #a7f3d0;
+            grid-row: span 2;
+
+        }
+
+        .equal:hover {
+            background-color: #6ee7b7;
+        }
+
+        .clear {
+            background-color: #fecaca;
+        }
+
+        .clear:hover {
+            background-color: #fca5a5;
+        }
+
+        .span-2 {
+            grid-column: span 2;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="calculator">
+        <div class="display" id="display">0</div>
+        <div class="buttons">
+            <button class="clear" onclick="clearDisplay()">C</button>
+            <button class="clear" onclick="deleteLast()">DEL</button>
+            <button class="operator" onclick="appendOperator('/')">/</button>
+            <button class="operator" onclick="appendOperator('*')">*</button>
+
+            <button onclick="appendNumber('7')">7</button>
+            <button onclick="appendNumber('8')">8</button>
+            <button onclick="appendNumber('9')">9</button>
+            <button class="operator" onclick="appendOperator('-')">-</button>
+
+            <button onclick="appendNumber('4')">4</button>
+            <button onclick="appendNumber('5')">5</button>
+            <button onclick="appendNumber('6')">6</button>
+            <button class="operator" onclick="appendOperator('+')">+</button>
+
+            <button onclick="appendNumber('1')">1</button>
+            <button onclick="appendNumber('2')">2</button>
+            <button onclick="appendNumber('3')">3</button>
+            <button class="equal" onclick="calculate()">=</button>
+
+            <button class="span-2" onclick="appendNumber('0')">0</button>
+            <button onclick="appendNumber('.')">.</button>
+        </div>
+    </div>
+
+    <script>
+        let display = document.getElementById('display');
+        let expression = '';
+
+        function appendNumber(num) {
+            if (display.innerText === '0' || display.innerText === 'Error') {
+                display.innerText = num;
+                expression = num;
+            } else {
+                display.innerText += num;
+                expression += num;
+            }
+        }
+
+        function appendOperator(op) {
+            const last = expression.slice(-1);
+            if ('+-*/%'.includes(last)) return;
+            display.innerText += op;
+            expression += op;
+        }
+
+        function clearDisplay() {
+            display.innerText = '0';
+            expression = '';
+        }
+
+        function calculate() {
+            try {
+                const result = Function('"use strict"; return (' + expression + ')')();
+                display.innerText = result;
+                expression = result.toString();
+            } catch {
+                display.innerText = 'Error';
+                expression = '';
+            }
+        }
+
+        function deleteLast() {
+            if (expression.length > 0) {
+                expression = expression.slice(0, -1);
+                display.innerText = expression || '0';
+            }
+        }
+
+    </script>
+
+</body>
+
+</html>
